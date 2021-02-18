@@ -1,0 +1,28 @@
+name: Publish
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build_publish:
+    name: Build and Publish
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Install Ruby
+      uses: ruby/setup-ruby@v1
+      with:
+        ruby-version: 2.6
+    - name: Build gem
+      run: gem build *.gemspec
+    - name: Publish to GitHub Package Registry
+      run: |
+        mkdir -p $HOME/.gem
+        touch $HOME/.gem/credentials
+        chmod 0600 $HOME/.gem/credentials
+        printf -- "---\n:github: Bearer ${GITHUB_TOKEN}\n" > $HOME/.gem/credentials
+        gem push --KEY github --host https://rubygems.pkg.github.com/${OWNER} *.gem
+      env:
+        GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
+        OWNER: microsoft
