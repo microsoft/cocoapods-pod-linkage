@@ -1,14 +1,30 @@
-# Project
+# CocoaPods Pod Linkage plugin
 
-> This repo has been populated by an initial template to help get you started. Please
-> make sure to update the content to build a great experience for community-building.
+This project is a [CocoaPods](https://github.com/CocoaPods/CocoaPods) plugin that allows to set a `:linkage` option for a specific pod.
 
-As the maintainer of this project, please make a few updates:
+## Usage
 
-- Improving this README.MD file to provide a great experience
-- Updating SUPPORT.MD with content about this project's support experience
-- Understanding the security reporting process in SECURITY.MD
-- Remove this section from the README
+Add to your Podfile
+```Ruby
+plugin 'cocoapods-pod-linkage'
+```
+
+Then, use the `:linkage` option to change the linking style of that pod
+```Ruby
+target :MyTarget do
+  use_frameworks! :linkage => :static
+
+  pod 'MyStaticPod', '1.2.3'
+  pod 'MyDynamicPod', '1.2.3', :linkage => :dynamic
+end
+```
+
+## Run tests for this plugin
+
+To run the tests, use
+```shell
+rake tests
+```
 
 ## Contributing
 
