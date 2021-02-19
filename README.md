@@ -2,6 +2,15 @@
 
 This project is a [CocoaPods](https://github.com/CocoaPods/CocoaPods) plugin that allows to set a `:linkage` option for a specific pod.
 
+CocoaPods doesn't support mixing static and dynamic pods in the same target, you can use `use_frameworks! :linkage => :static` or `use_frameworks! :linkage => :dynamic` to configure the linking style of all pods in a target. This plugin adds support for the `:linkage` option for single pods allowing you to mix static and dynamic linking in the same target.
+
+## Getting started
+
+Install the plugin by adding to your `Gemfile`
+```Ruby
+gem "cocoapods-pod-linkage"
+```
+
 ## Usage
 
 Add to your Podfile
