@@ -83,11 +83,11 @@ module Pod
     class Podfile
         class TargetDefinition
 
-            def detect_explicit_pod_linkage(name, requirements)
+            def parse_explicit_pod_linkage(name, requirements)
+                options = requirements.last
+                return requirements unless options.is_a?(Hash)
                 @explicit_pod_linkage ||= {}
-                options = requirements.last || {}
-                @explicit_pod_linkage[Specification.root_name(name)] = options[:linkage] if options.is_a?(Hash) && options[:linkage]
-                options.delete(:linkage) if options.is_a?(Hash)
+                @explicit_pod_linkage[Specification.root_name(name)] = options.delete(:linkage) if options[:linkage]
                 requirements.pop if options.empty?
             end
 
@@ -99,7 +99,7 @@ module Pod
 
             original_parse_inhibit_warnings = instance_method(:parse_inhibit_warnings)
             define_method(:parse_inhibit_warnings) do |name, requirements|
-                detect_explicit_pod_linkage(name, requirements)
+                parse_explicit_pod_linkage(name, requirements)
                 original_parse_inhibit_warnings.bind(self).call(name, requirements)
             end
 
